@@ -1891,50 +1891,7 @@ u8 TrySetCantSelectMoveBattleScript(void)
 
 u8 CheckMoveLimitations(u8 battlerId, u8 unusableMoves, u8 check)
 {
-    u8 holdEffect = GetBattlerHoldEffect(battlerId, TRUE);
-    u16 *choicedMove = &gBattleStruct->choicedMove[battlerId];
-    s32 i;
-
-    gPotentialItemEffectBattler = battlerId;
-
-    for (i = 0; i < MAX_MON_MOVES; i++)
-    {
-        if (gBattleMons[battlerId].moves[i] == 0 && check & MOVE_LIMITATION_ZEROMOVE)
-            unusableMoves |= gBitTable[i];
-        else if (gBattleMons[battlerId].pp[i] == 0 && check & MOVE_LIMITATION_PP)
-            unusableMoves |= gBitTable[i];
-        else if (gBattleMons[battlerId].moves[i] == gDisableStructs[battlerId].disabledMove && check & MOVE_LIMITATION_DISABLED)
-            unusableMoves |= gBitTable[i];
-        else if (gBattleMons[battlerId].moves[i] == gLastMoves[battlerId] && check & MOVE_LIMITATION_TORMENTED && gBattleMons[battlerId].status2 & STATUS2_TORMENT)
-            unusableMoves |= gBitTable[i];
-        else if (gDisableStructs[battlerId].tauntTimer && check & MOVE_LIMITATION_TAUNT && gBattleMoves[gBattleMons[battlerId].moves[i]].power == 0)
-            unusableMoves |= gBitTable[i];
-        else if (GetImprisonedMovesCount(battlerId, gBattleMons[battlerId].moves[i]) && check & MOVE_LIMITATION_IMPRISON)
-            unusableMoves |= gBitTable[i];
-        else if (gDisableStructs[battlerId].encoreTimer && gDisableStructs[battlerId].encoredMove != gBattleMons[battlerId].moves[i])
-            unusableMoves |= gBitTable[i];
-        else if (HOLD_EFFECT_CHOICE(holdEffect) && *choicedMove != 0 && *choicedMove != 0xFFFF && *choicedMove != gBattleMons[battlerId].moves[i])
-            unusableMoves |= gBitTable[i];
-        else if (holdEffect == HOLD_EFFECT_ASSAULT_VEST && gBattleMoves[gBattleMons[battlerId].moves[i]].power == 0 && gBattleMons[battlerId].moves[i] != MOVE_ME_FIRST)
-            unusableMoves |= gBitTable[i];
-        else if (IsGravityPreventingMove(gBattleMons[battlerId].moves[i]))
-            unusableMoves |= gBitTable[i];
-        else if (IsHealBlockPreventingMove(battlerId, gBattleMons[battlerId].moves[i]))
-            unusableMoves |= gBitTable[i];
-        else if (IsBelchPreventingMove(battlerId, gBattleMons[battlerId].moves[i]))
-            unusableMoves |= gBitTable[i];
-        else if (gDisableStructs[battlerId].throatChopTimer && gBattleMoves[gBattleMons[battlerId].moves[i]].flags & FLAG_SOUND)
-            unusableMoves |= gBitTable[i];
-        else if (gBattleMons[battlerId].moves[i] == MOVE_STUFF_CHEEKS && ItemId_GetPocket(gBattleMons[gActiveBattler].item) != POCKET_BERRIES)
-            unusableMoves |= gBitTable[i];
-        else if ((GetBattlerAbility(battlerId) == ABILITY_GORILLA_TACTICS || 
-		          GetBattlerAbility(battlerId) == ABILITY_SAGE_POWER || 
-		          SpeciesHasInnate(gBattleMons[battlerId].species, ABILITY_GORILLA_TACTICS) ||
-				  SpeciesHasInnate(gBattleMons[battlerId].species, ABILITY_SAGE_POWER))
-			&& *choicedMove != 0 && *choicedMove != 0xFFFF && *choicedMove != gBattleMons[battlerId].moves[i])
-            unusableMoves |= gBitTable[i];
-    }
-    return unusableMoves;
+    return AI_DATA->moveLimitations[battlerId];
 }
 
 bool8 AreAllMovesUnusable(void)
