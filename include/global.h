@@ -213,7 +213,6 @@ struct Pokedex
     /*0x04*/ u32 unownPersonality; // set when you first see Unown
     /*0x08*/ u32 spindaPersonality; // set when you first see Spinda
     /*0x0C*/ u32 unknown3;
-    /*0x10*/ u8 filler[0x68]; // Previously Dex Flags, feel free to remove.
 };
 
 struct PokemonJumpRecords
@@ -446,10 +445,7 @@ struct BattleFrontier
     /*0xEE0*/ u8 trainerFlags;
     /*0xEE1*/ u8 opponentNames[2][PLAYER_NAME_LENGTH + 1];
     /*0xEF1*/ u8 opponentTrainerIds[2][TRAINER_ID_LENGTH];
-    /*0xEF9*/ u8 unk_EF9:7; // Never read
     /*0xEF9*/ u8 savedGame:1;
-    /*0xEFA*/ u8 unused_EFA;
-    /*0xEFB*/ u8 unused_EFB;
     /*0xEFC*/ struct DomeMonData domePlayerPartyData[FRONTIER_PARTY_SIZE];
 };
 
@@ -512,7 +508,6 @@ struct SaveBlock2
              u16 regionMapZoom:1; // whether the map is zoomed in
              u16 gameDifficulty:4; // Which difficulty the player chose (Normal/Hard/Challenge/Insanity, with Normal being 0)
     /*0x18*/ struct Pokedex pokedex;
-    /*0x90*/ u8 filler_90[6]; //To Delete
              u8 levelCaps; // Various options for level caps
              u16 autoRun:1;
              u16 permanentRepel:1;
@@ -543,7 +538,6 @@ struct SaveBlock2
               u8 typeRandomizedMode:1;
               u8 encounterRandomizedLegendaryMode:1;
               u8 filler:2;
-    /*0x???*/ struct ItemSlot bagPocket_MegaStones_New[BAG_MEGASTONES_COUNT_NEW];
 }; // sizeof=0xF2C
 
 extern struct SaveBlock2 *gSaveBlock2Ptr;
@@ -615,7 +609,6 @@ struct Roamer
     /*0x11*/ u8 smart;
     /*0x12*/ u8 tough;
     /*0x13*/ bool8 active;
-    /*0x14*/ u8 filler[0x8];
 };
 
 struct RamScriptData
@@ -663,7 +656,6 @@ struct MauvilleManBard
     /*0x02*/ u16 songLyrics[BARD_SONG_LENGTH];
     /*0x0E*/ u16 temporaryLyrics[BARD_SONG_LENGTH];
     /*0x1A*/ u8 playerName[PLAYER_NAME_LENGTH + 1];
-    /*0x22*/ u8 filler_2DB6[0x3];
     /*0x25*/ u8 playerTrainerId[TRAINER_ID_LENGTH];
     /*0x29*/ bool8 hasChangedSong;
     /*0x2A*/ u8 language;
@@ -673,7 +665,6 @@ struct MauvilleManStoryteller
 {
     u8 id;
     bool8 alreadyRecorded;
-    u8 filler2[2];
     u8 gameStatIDs[NUM_STORYTELLER_TALES];
     u8 trainerNames[NUM_STORYTELLER_TALES][PLAYER_NAME_LENGTH];
     u8 statValues[NUM_STORYTELLER_TALES][4];
@@ -714,7 +705,6 @@ typedef union OldMan
     struct MauvilleManHipster hipster;
     struct MauvilleOldManTrader trader;
     struct MauvilleManStoryteller storyteller;
-    u8 filler[0x40];
 } OldMan;
 
 struct RecordMixing_UnknownStructSub
@@ -753,7 +743,6 @@ struct RecordMixingGiftData
     u8 unk0;
     u8 quantity;
     u16 itemId;
-    u8 filler4[8];
 };
 
 struct RecordMixingGift
@@ -1027,7 +1016,7 @@ struct SaveBlock1
     /*0x790*/ struct ItemSlot bagPocket_Berries[BAG_BERRIES_COUNT];
     /*0x650*/ struct ItemSlot bagPocket_Medicine[BAG_MEDICINE_COUNT];
     /*0x690*/ struct ItemSlot bagPocket_Battle[BAG_BATTLE_COUNT];
-    /*0x790*/ struct ItemSlot bagPocket_MegaStones[BAG_MEGASTONES_COUNT];//Unused
+    /*0x790*/ struct ItemSlot bagPocket_MegaStones[BAG_MEGASTONES_COUNT];
     /*0x848*/ struct Pokeblock pokeblocks[POKEBLOCKS_COUNT];
     /*0x9BC*/ u16 berryBlenderRecords[3];
     /*0x9C2*/ u8 field_9C2[6];

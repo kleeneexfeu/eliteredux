@@ -41092,7 +41092,7 @@ static const struct TrainerMonItemCustomMoves sParty_Kaylee[] = { // Debug Train
     .ivs = {31, 31, 31, 31, 31, 31},
     .evs = {0, 0, 0, 0, 0, 0},      // HP, Atk, Def, SpA, SpD, Spe
 	.nature = NATURE_ADAMANT,
-	.moves = MOVE_TACKLE, MOVE_TACKLE, MOVE_TACKLE, MOVE_TACKLE
+	.moves = MOVE_STICKY_WEB, MOVE_STICKY_WEB, MOVE_STICKY_WEB, MOVE_STICKY_WEB
     },
     {
     .lvl = 0,

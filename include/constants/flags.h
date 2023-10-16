@@ -1626,7 +1626,9 @@
 #define FLAG_UNUSED_0x95F                           (DAILY_FLAGS_START + 0x3F) // Unused Flag
 #define DAILY_FLAGS_END                             (FLAG_UNUSED_0x95F + (7 - FLAG_UNUSED_0x95F % 8))
 
-#define FLAGS_COUNT (DAILY_FLAGS_END + 1)
+#define OLD_FLAGS_COUNT (DAILY_FLAGS_END + 1)
+
+#define FLAGS_COUNT (OLD_FLAGS_COUNT * 2)
 
 // Special Flags (Stored in EWRAM (gSpecialFlags), not in the SaveBlock)
 #define SPECIAL_FLAGS_START                     0x4000

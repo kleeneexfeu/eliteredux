@@ -27,7 +27,7 @@ struct LoadedSaveData
     struct ItemSlot berries[BAG_BERRIES_COUNT];
     struct ItemSlot medicine[BAG_MEDICINE_COUNT];
     struct ItemSlot battle[BAG_BATTLE_COUNT];
-    struct ItemSlot megaStones[BAG_MEGASTONES_COUNT_NEW];
+    struct ItemSlot megaStones[BAG_MEGASTONES_COUNT];
     struct MailStruct mail[MAIL_COUNT];
 };
 
@@ -235,8 +235,8 @@ void LoadPlayerBag(void)
         gLoadedSaveData.battle[i] = gSaveBlock1Ptr->bagPocket_Battle[i];
 
     // load player mega stones.
-    for (i = 0; i < BAG_MEGASTONES_COUNT_NEW; i++)
-        gLoadedSaveData.megaStones[i] = gSaveBlock2Ptr->bagPocket_MegaStones_New[i];
+    for (i = 0; i < BAG_MEGASTONES_COUNT; i++)
+        gLoadedSaveData.megaStones[i] = gSaveBlock1Ptr->bagPocket_MegaStones[i];
 
     // load mail.
     for (i = 0; i < MAIL_COUNT; i++)
@@ -279,8 +279,8 @@ void SavePlayerBag(void)
         gSaveBlock1Ptr->bagPocket_Battle[i] = gLoadedSaveData.battle[i];
 
     // load player mega stones.
-    for (i = 0; i < BAG_MEGASTONES_COUNT_NEW; i++)
-        gSaveBlock2Ptr->bagPocket_MegaStones_New[i] = gLoadedSaveData.megaStones[i];
+    for (i = 0; i < BAG_MEGASTONES_COUNT; i++)
+        gSaveBlock1Ptr->bagPocket_MegaStones[i] = gLoadedSaveData.megaStones[i];
 
     // save mail.
     for (i = 0; i < MAIL_COUNT; i++)
