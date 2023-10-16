@@ -35,12 +35,6 @@ struct PokemonSubstruct2
     /*0x03*/ u8 speedEV;
     /*0x04*/ u8 spAttackEV;
     /*0x05*/ u8 spDefenseEV;
-    /*0x06*/ u8 cool;
-    /*0x07*/ u8 beauty;
-    /*0x08*/ u8 cute;
-    /*0x09*/ u8 smart;
-    /*0x0A*/ u8 tough;
-    /*0x0B*/ u8 sheen;
 }; /* size = 12 */
 
 struct PokemonSubstruct3

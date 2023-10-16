@@ -24,47 +24,21 @@ struct PokemonSubstruct2
     u8 speedEV;
     u8 spAttackEV;
     u8 spDefenseEV;
-    u8 cool;
-    u8 beauty;
-    u8 cute;
-    u8 smart;
-    u8 tough;
-    u8 sheen;
+    u8 isShiny:1;
+    u8 speedDown:1;
+    u8 attackDown:1;
+    u8 pokeball:5;
 };
 
 struct PokemonSubstruct3
 {
- /* 0x00 */ u8 pokerus;
  /* 0x01 */ u8 metLocation;
 
  /* 0x02 */ u16 metLevel:7;
- /* 0x02 */ u16 metGame:3; // Was 4
+ /* 0x02 */ u16 metGame:1;    // Was 4
+ /* 0x02 */ u16 abilityNum:2; // Was 4
  /* 0x03 */ u16 nature:5;
  /* 0x03 */ u16 otGender:1;
-
- /* 0x04 */ u32 hpIV:5;
- /* 0x04 */ u32 attackIV:5;
- /* 0x05 */ u32 defenseIV:5;
- /* 0x05 */ u32 speedIV:5;
- /* 0x05 */ u32 spAttackIV:5;
- /* 0x06 */ u32 spDefenseIV:5;
- /* 0x07 */ u32 isEgg:1;
- /* 0x07 */ u32 speedDown:1; //New
-
- /* 0x08 */	u32 pokeball:5;
- /* 0x08 */	u32 abilityNum:2;
- /* 0x09 */	u32 coolRibbon:3;
- /* 0x09 */	u32 beautyRibbon:3; 
- /* 0x09 */	u32 cuteRibbon:3; 
- /* 0x0A */	u32 smartRibbon:3; 
- /* 0x0A */	u32 toughRibbon:3;
- /* 0x0A */	u32 championRibbon:1;
- /* 0x0A */	u32 winningRibbon:1;
- /* 0x0B */	u32 victoryRibbon:1;
- /* 0x0B */ u32 artistRibbon:1;
- /* 0x0B */ u32 effortRibbon:1;
- /* 0x0B */ u32 fatefulEncounter:4;
- /* 0x0B */ u32 eventLegal:1;
 };
 
 union PokemonSubstruct

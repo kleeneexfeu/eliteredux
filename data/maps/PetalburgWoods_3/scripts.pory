@@ -13,8 +13,7 @@ script PetalburgWoods3_EventScript_PrimalCascoon_Battle {
 			if (var(VAR_RESULT) == 1) {
 				msgbox(format("Let's have it then! Cascoon, you ready to take some names?"), MSGBOX_NPC) // When the player accepts the battle
 				trainerbattle_no_intro(TRAINER_BANEFUL_PETALBURG_WOODS, format("Amazing... You've broken the limits too...")) // in-battle, player wins
-				msgbox(format("I'm well impressed, mate. I reckon you're champion material.
-I've got a great reward for you since you've put the work in. Here."), MSGBOX_NPC) // after player won
+				msgbox(format("I'm well impressed, mate. I reckon you're champion material. I've got a great reward for you since you've put the work in. Here."), MSGBOX_NPC) // after player won
 				playfanfare(MUS_OBTAIN_ITEM)
 				giveitem(ITEM_PURPLE_ORB, 1) // Item given to the player
 				waitmessage

@@ -4564,6 +4564,9 @@ u32 GetMonData(struct Pokemon *mon, s32 field, u8* data)
     return ret;
 }
 
+#define DEFAULT_CONTEST_STATS 0
+#define DEFAULT_PP_BONUS 255
+
 u32 GetBoxMonData(struct BoxPokemon *boxMon, s32 field, u8 *data)
 {
     s32 i;
@@ -4681,7 +4684,7 @@ u32 GetBoxMonData(struct BoxPokemon *boxMon, s32 field, u8 *data)
         retVal = substruct0->experience;
         break;
     case MON_DATA_PP_BONUSES:
-        retVal = 255;//substruct0->ppBonuses;
+        retVal = DEFAULT_PP_BONUS;
         break;
     case MON_DATA_FRIENDSHIP:
         retVal = substruct0->friendship;
@@ -4717,22 +4720,22 @@ u32 GetBoxMonData(struct BoxPokemon *boxMon, s32 field, u8 *data)
         retVal = substruct2->spDefenseEV;
         break;
     case MON_DATA_COOL:
-        retVal = substruct2->cool;
+        retVal = DEFAULT_CONTEST_STATS;
         break;
     case MON_DATA_BEAUTY:
-        retVal = substruct2->beauty;
+        retVal = DEFAULT_CONTEST_STATS;
         break;
     case MON_DATA_CUTE:
-        retVal = substruct2->cute;
+        retVal = DEFAULT_CONTEST_STATS;
         break;
     case MON_DATA_SMART:
-        retVal = substruct2->smart;
+        retVal = DEFAULT_CONTEST_STATS;
         break;
     case MON_DATA_TOUGH:
-        retVal = substruct2->tough;
+        retVal = DEFAULT_CONTEST_STATS;
         break;
     case MON_DATA_SHEEN:
-        retVal = substruct2->sheen;
+        retVal = DEFAULT_CONTEST_STATS;
         break;
     case MON_DATA_POKERUS:
         retVal = substruct3->pokerus;
@@ -5021,7 +5024,6 @@ void SetBoxMonData(struct BoxPokemon *boxMon, s32 field, const void *dataArg)
         SET32(substruct0->experience);
         break;
     case MON_DATA_PP_BONUSES:
-        SET8(substruct0->ppBonuses);
         break;
     case MON_DATA_FRIENDSHIP:
         SET8(substruct0->friendship);
@@ -5057,22 +5059,11 @@ void SetBoxMonData(struct BoxPokemon *boxMon, s32 field, const void *dataArg)
             SET8(substruct2->spDefenseEV);
         break;
     case MON_DATA_COOL:
-        SET8(substruct2->cool);
-        break;
     case MON_DATA_BEAUTY:
-        SET8(substruct2->beauty);
-        break;
     case MON_DATA_CUTE:
-        SET8(substruct2->cute);
-        break;
     case MON_DATA_SMART:
-        SET8(substruct2->smart);
-        break;
     case MON_DATA_TOUGH:
-        SET8(substruct2->tough);
-        break;
     case MON_DATA_SHEEN:
-        SET8(substruct2->sheen);
         break;
     case MON_DATA_POKERUS:
         SET8(substruct3->pokerus);
