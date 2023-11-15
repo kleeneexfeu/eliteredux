@@ -1393,6 +1393,81 @@ static bool32 NoTargetPresent(u32 move)
     return FALSE;
 }
 
+static bool32 TryArceusFormChange(moveType)
+{
+    if (GET_BASE_SPECIES_ID(gBattleMons[gBattlerAttacker].species) == SPECIES_ARCEUS)
+    {
+        if (!(gBattleMons[gBattlerAttacker].status2 & STATUS2_TRANSFORMED)
+        && (gBattleMons[gBattlerAttacker].type1 != moveType || gBattleMons[gBattlerAttacker].type2 != moveType ||
+          (gBattleMons[gBattlerAttacker].type3 != moveType && gBattleMons[gBattlerAttacker].type3 != TYPE_MYSTERY)))
+        {
+            switch (moveType)
+            {
+            default:
+                return FALSE;
+            case TYPE_NORMAL:
+                gBattleMons[gBattlerAttacker].species = SPECIES_ARCEUS;
+                break;
+            case TYPE_FIGHTING:
+                gBattleMons[gBattlerAttacker].species = SPECIES_ARCEUS_FIGHTING;
+                break;
+            case TYPE_FLYING:
+                gBattleMons[gBattlerAttacker].species = SPECIES_ARCEUS_FLYING;
+                break;
+            case TYPE_GROUND:
+                gBattleMons[gBattlerAttacker].species = SPECIES_ARCEUS_GROUND;
+                break;
+            case TYPE_ROCK:
+                gBattleMons[gBattlerAttacker].species = SPECIES_ARCEUS_ROCK;
+                break;
+            case TYPE_BUG:
+                gBattleMons[gBattlerAttacker].species = SPECIES_ARCEUS_BUG;
+                break;
+            case TYPE_GHOST:
+                gBattleMons[gBattlerAttacker].species = SPECIES_ARCEUS_GHOST;
+                break;
+            case TYPE_FIRE:
+                gBattleMons[gBattlerAttacker].species = SPECIES_ARCEUS_FIRE;
+                break;
+            case TYPE_WATER:
+                gBattleMons[gBattlerAttacker].species = SPECIES_ARCEUS_WATER;
+                break;
+            case TYPE_GRASS:
+                gBattleMons[gBattlerAttacker].species = SPECIES_ARCEUS_GRASS;
+                break;
+            case TYPE_ELECTRIC:
+                gBattleMons[gBattlerAttacker].species = SPECIES_ARCEUS_ELECTRIC;
+                break;
+            case TYPE_ICE:
+                gBattleMons[gBattlerAttacker].species = SPECIES_ARCEUS_ICE;
+                break;
+            case TYPE_DRAGON:
+                gBattleMons[gBattlerAttacker].species = SPECIES_ARCEUS_DRAGON;
+                break;
+            case TYPE_DARK:
+                gBattleMons[gBattlerAttacker].species = SPECIES_ARCEUS_DARK;
+                break;
+            case TYPE_FAIRY:
+                gBattleMons[gBattlerAttacker].species = SPECIES_ARCEUS_FAIRY;
+                break;
+            case TYPE_PSYCHIC:
+                gBattleMons[gBattlerAttacker].species = SPECIES_ARCEUS_PSYCHIC;
+                break;
+            case TYPE_POISON:
+                gBattleMons[gBattlerAttacker].species = SPECIES_ARCEUS_POISON;
+                break;
+            case TYPE_STEEL:
+                gBattleMons[gBattlerAttacker].species = SPECIES_ARCEUS_STEEL;
+                break;
+            }
+            BattleScriptPushCursor();
+            gBattlescriptCurrInstr = BattleScript_AttackerFormChange;
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
 static bool32 TryAegiFormChange(void)
 {
     // Only Aegislash with Stance Change can transform, transformed mons cannot.
@@ -1439,6 +1514,29 @@ bool8 PartyIsMaxLevel(void)
 static void Cmd_attackcanceler(void)
 {
     s32 i, moveType;
+    u32 currentEffectiveness;
+    u32 newEffectiveness;
+    u32 optimalType;
+    
+    currentEffectiveness = 0;
+    newEffectiveness = 0;
+    optimalType = 0;
+    if (gCurrentMove == MOVE_JUDGMENT && (GET_BASE_SPECIES_ID(gBattleMons[gBattlerAttacker].species) == SPECIES_ARCEUS))
+    {
+        for (i = TYPE_NORMAL; i < TYPE_FAIRY + 1; i++)
+        {
+            if (!TYPE_CANCELED_BY_PRIMAL(i))
+            {
+                newEffectiveness = CalcTypeEffectivenessMultiplier(gCurrentMove, i, gBattlerAttacker, gBattlerTarget, FALSE);
+                if (currentEffectiveness < newEffectiveness)
+                {
+                    currentEffectiveness = newEffectiveness;
+                    optimalType = i;
+                }
+            }
+        }
+        gBattleStruct->dynamicMoveType = optimalType | F_DYNAMIC_TYPE_1;
+    }
 
     GET_MOVE_TYPE(gCurrentMove, moveType);
 
@@ -1547,6 +1645,9 @@ static void Cmd_attackcanceler(void)
         PREPARE_BYTE_NUMBER_BUFFER(gBattleScripting.multihitString, 1, 0)
         return;
     }
+
+    if (gCurrentMove == MOVE_JUDGMENT && TryArceusFormChange(moveType))
+        return;
 
     // Check Protean activation
     if ((GetBattlerAbility(gBattlerAttacker) == ABILITY_PROTEAN || BattlerHasInnate(gBattlerAttacker, ABILITY_PROTEAN) ||

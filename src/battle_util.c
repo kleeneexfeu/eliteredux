@@ -15828,7 +15828,7 @@ void DoBurmyFormChange(u32 monId)
 void UndoFormChange(u32 monId, u32 side, bool32 isSwitchingOut)
 // || gBattleMons[battlerDef].status2 & STATUS2_TRANSFORMED check for transformed mon before reverting
 {
-    u32 i, currSpecies;
+    u32 i, currSpecies, speciesArceus;
     struct Pokemon *party = (side == B_SIDE_PLAYER) ? gPlayerParty : gEnemyParty;
     static const u16 species[][3] =
     {
@@ -15855,9 +15855,17 @@ void UndoFormChange(u32 monId, u32 side, bool32 isSwitchingOut)
         {SPECIES_DARMANITAN_ZEN_MODE_GALARIAN,  SPECIES_DARMANITAN_GALARIAN,  TRUE},
     };
 
+    speciesArceus = SPECIES_ARCEUS;
     currSpecies = GetMonData(&party[monId], MON_DATA_SPECIES, NULL);
     for (i = 0; i < ARRAY_COUNT(species); i++)
     {
+        if (GET_BASE_SPECIES_ID(currSpecies) == SPECIES_ARCEUS
+        && ItemId_GetHoldEffect(GetMonData(&party[monId],MON_DATA_HELD_ITEM, NULL)) != HOLD_EFFECT_PLATE)
+        {
+            SetMonData(&party[monId], MON_DATA_SPECIES, &speciesArceus);
+            CalculateMonStats(&party[monId]);
+            break;
+        }
         if (currSpecies == species[i][0] && (!isSwitchingOut || species[i][2] == TRUE))
         {
             SetMonData(&party[monId], MON_DATA_SPECIES, &species[i][1]);

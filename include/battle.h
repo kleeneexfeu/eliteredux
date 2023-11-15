@@ -628,14 +628,19 @@ struct BattleStruct
     bool8 singleuseability[PARTY_SIZE][NUM_INNATE_PER_SPECIES + 1][2]; // For the sake of Instruct
 };
 
-#define GET_MOVE_TYPE(move, typeArg)                        \
-{                                                           \
-    if (gBattleStruct->dynamicMoveType)                     \
-        typeArg = gBattleStruct->dynamicMoveType & 0x3F;    \
-    else                                                    \
-        typeArg = gBattleMoves[move].type;                  \
+#define F_DYNAMIC_TYPE_1 (1 << 6)
+#define F_DYNAMIC_TYPE_2 (1 << 7)
+#define DYNAMIC_TYPE_MASK (F_DYNAMIC_TYPE_1 - 1)
+
+#define GET_MOVE_TYPE(move, typeArg)                                  \
+{                                                                     \
+    if (gBattleStruct->dynamicMoveType)                               \
+        typeArg = gBattleStruct->dynamicMoveType & DYNAMIC_TYPE_MASK; \
+    else                                                              \
+        typeArg = gBattleMoves[move].type;                            \
 }
 
+#define TYPE_CANCELED_BY_PRIMAL(type)((type == TYPE_FIRE && (gBattleWeather & WEATHER_RAIN_PRIMAL)) || (type == TYPE_WATER && (gBattleWeather & WEATHER_SUN_PRIMAL)))
 #define IS_MOVE_PHYSICAL(move)(GetBattleMoveSplit(move) == SPLIT_PHYSICAL)
 #define IS_MOVE_SPECIAL(move)(GetBattleMoveSplit(move) == SPLIT_SPECIAL)
 #define IS_MOVE_STATUS(move)(gBattleMoves[move].split == SPLIT_STATUS)
