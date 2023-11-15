@@ -612,8 +612,8 @@ void SetBattlerData(u8 battlerId)
         if (illusionSpecies != SPECIES_NONE)
         {
             // If the battler's type has not been changed, AI assumes the types of the illusion mon.
-            if (gBattleMons[battlerId].type1 == gBaseStats[species].type1
-                && gBattleMons[battlerId].type2 == gBaseStats[species].type2)
+            if (gBattleMons[battlerId].type1 == GetMonDataFromBattler(battlerId, MON_DATA_TYPE1)
+                && gBattleMons[battlerId].type2 == GetMonDataFromBattler(battlerId, MON_DATA_TYPE2))
             {
                 gBattleMons[battlerId].type1 = gBaseStats[illusionSpecies].type1;
                 gBattleMons[battlerId].type2 = gBaseStats[illusionSpecies].type2;

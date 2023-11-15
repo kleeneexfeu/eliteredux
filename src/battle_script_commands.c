@@ -6233,13 +6233,13 @@ static void Cmd_switchindataupdate(void)
         monData[i] = gBattleResources->bufferB[gActiveBattler][4 + i];
     }
     
-    gBattleMons[gActiveBattler].type1 = RandomizeType(gBaseStats[gBattleMons[gActiveBattler].species].type1, gBattleMons[gActiveBattler].species, gBattleMons[gActiveBattler].personality, TRUE);
-    gBattleMons[gActiveBattler].type2 = RandomizeType(gBaseStats[gBattleMons[gActiveBattler].species].type2, gBattleMons[gActiveBattler].species, gBattleMons[gActiveBattler].personality, FALSE);
+    gBattleMons[gActiveBattler].type1 = RandomizeType(GetMonDataFromBattler(gActiveBattler, MON_DATA_TYPE1), gBattleMons[gActiveBattler].species, gBattleMons[gActiveBattler].personality, TRUE);
+    gBattleMons[gActiveBattler].type2 = RandomizeType(GetMonDataFromBattler(gActiveBattler, MON_DATA_TYPE2), gBattleMons[gActiveBattler].species, gBattleMons[gActiveBattler].personality, FALSE);
     gBattleMons[gActiveBattler].type3 = TYPE_MYSTERY;
     if(GetBattlerSide(gActiveBattler) == B_SIDE_PLAYER) //Only the player has a randomized ability
-        gBattleMons[gActiveBattler].ability = RandomizeAbility(GetAbilityBySpecies(gBattleMons[gActiveBattler].species, gBattleMons[gActiveBattler].abilityNum), gBattleMons[gActiveBattler].species, gBattleMons[gActiveBattler].personality);
+        gBattleMons[gActiveBattler].ability = RandomizeAbility(GetMonDataFromBattler(gActiveBattler, MON_DATA_ABILITY), gBattleMons[gActiveBattler].species, gBattleMons[gActiveBattler].personality);
     else
-        gBattleMons[gActiveBattler].ability = GetAbilityBySpecies(gBattleMons[gActiveBattler].species, gBattleMons[gActiveBattler].abilityNum);
+        gBattleMons[gActiveBattler].ability = GetMonDataFromBattler(gActiveBattler, MON_DATA_ABILITY);
 
     // check knocked off item
     i = GetBattlerSide(gActiveBattler);
@@ -8237,12 +8237,12 @@ static void RecalcBattlerStats(u32 battler, struct Pokemon *mon)
     gBattleMons[battler].ability = GetMonAbility(mon);
 
     if(GetBattlerSide(battler) == B_SIDE_PLAYER) //Only the player has a randomized ability
-        gBattleMons[battler].ability = RandomizeAbility(GetAbilityBySpecies(gBattleMons[battler].species, gBattleMons[battler].abilityNum), gBattleMons[battler].species, gBattleMons[battler].personality);
+        gBattleMons[battler].ability = RandomizeAbility(GetMonAbility(mon), gBattleMons[battler].species, gBattleMons[battler].personality);
     else
-        gBattleMons[battler].ability = GetAbilityBySpecies(gBattleMons[battler].species, gBattleMons[battler].abilityNum);
+        gBattleMons[battler].ability = GetMonAbility(mon);
                 
-    gBattleMons[battler].type1 = RandomizeType(gBaseStats[gBattleMons[battler].species].type1, gBattleMons[battler].species, gBattleMons[battler].personality, TRUE);
-    gBattleMons[battler].type2 = RandomizeType(gBaseStats[gBattleMons[battler].species].type2, gBattleMons[battler].species, gBattleMons[battler].personality, FALSE);
+    gBattleMons[battler].type1 = RandomizeType(GetMonData(mon, MON_DATA_TYPE1), gBattleMons[battler].species, gBattleMons[battler].personality, TRUE);
+    gBattleMons[battler].type2 = RandomizeType(GetMonData(mon, MON_DATA_TYPE1), gBattleMons[battler].species, gBattleMons[battler].personality, FALSE);
 }
 
 static u32 GetHighestStatId(u32 battlerId)
@@ -12573,7 +12573,7 @@ static void Cmd_healpartystatus(void)
                          && !(gAbsentBattlerFlags & gBitTable[gActiveBattler]))
                     ability = GetBattlerAbility(gActiveBattler);
                 else
-                    ability = GetAbilityBySpecies(species, abilityNum);
+                    ability = GetMonAbility(&party[i]);
 
                 if (ability != ABILITY_SOUNDPROOF && !MonHasInnate(&party[i], ABILITY_SOUNDPROOF, FALSE))
                     toHeal |= (1 << i);

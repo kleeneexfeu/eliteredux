@@ -1595,12 +1595,12 @@ static bool8 ExtractMonDataToSummaryStruct(struct Pokemon *mon)
         sum->tough = GetMonData(mon, MON_DATA_TOUGH);
         break;
     case 5:
-        sum->hpBS    = gBaseStats[GetMonData(mon, MON_DATA_SPECIES2)].baseHP;
-        sum->atkBS   = gBaseStats[GetMonData(mon, MON_DATA_SPECIES2)].baseAttack;
-        sum->defBS   = gBaseStats[GetMonData(mon, MON_DATA_SPECIES2)].baseDefense;
-        sum->spatkBS = gBaseStats[GetMonData(mon, MON_DATA_SPECIES2)].baseSpAttack;
-        sum->spdefBS = gBaseStats[GetMonData(mon, MON_DATA_SPECIES2)].baseSpDefense;
-        sum->speedBS = gBaseStats[GetMonData(mon, MON_DATA_SPECIES2)].baseSpeed;
+        sum->hpBS    = gBaseStats[GetMonData(mon, MON_DATA_SPECIES2)].baseHP + GetMonData(mon, MON_DATA_CUSTOM_HP);
+        sum->atkBS   = gBaseStats[GetMonData(mon, MON_DATA_SPECIES2)].baseAttack + GetMonData(mon, MON_DATA_CUSTOM_ATK);
+        sum->defBS   = gBaseStats[GetMonData(mon, MON_DATA_SPECIES2)].baseDefense + GetMonData(mon, MON_DATA_CUSTOM_DEF);
+        sum->spatkBS = gBaseStats[GetMonData(mon, MON_DATA_SPECIES2)].baseSpAttack + GetMonData(mon, MON_DATA_CUSTOM_SPEED);
+        sum->spdefBS = gBaseStats[GetMonData(mon, MON_DATA_SPECIES2)].baseSpDefense + GetMonData(mon, MON_DATA_CUSTOM_SPATK);
+        sum->speedBS = gBaseStats[GetMonData(mon, MON_DATA_SPECIES2)].baseSpeed + GetMonData(mon, MON_DATA_CUSTOM_SPDEF);
         break;
     case 6:
         sum->hpEV = GetMonData(mon, MON_DATA_HP_EV);
@@ -1612,7 +1612,6 @@ static bool8 ExtractMonDataToSummaryStruct(struct Pokemon *mon)
         break;
     default:
         sum->ribbonCount = GetMonData(mon, MON_DATA_RIBBON_COUNT);
-        sum->fatefulEncounter = GetMonData(mon, MON_DATA_EVENT_LEGAL);
         if (sum->isEgg)
         {
             sMonSummaryScreen->minPageIndex = PSS_PAGE_MEMO;
@@ -4376,7 +4375,7 @@ static void BufferMonPokemonAbilityAndInnates(void)
     u16 innate1 = gBaseStats[species].innates[0];
     u16 innate2 = gBaseStats[species].innates[1];
     u16 innate3 = gBaseStats[species].innates[2];
-    u16 ability = GetAbilityBySpecies(sMonSummaryScreen->summary.species, GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ABILITY_NUM));
+    u16 ability = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ABILITY);
 
     DynamicPlaceholderTextUtil_Reset();
     DynamicPlaceholderTextUtil_SetPlaceholderPtr(0, sMemoNatureTextColor);
@@ -4390,7 +4389,7 @@ static void BufferMonPokemonAbilityAndInnates(void)
         innate1 = RandomizeInnate(gBaseStats[species].innates[0], species, personality);
         innate2 = RandomizeInnate(gBaseStats[species].innates[1], species, personality);
         innate3 = RandomizeInnate(gBaseStats[species].innates[2], species, personality);
-        ability = RandomizeAbility(GetAbilityBySpecies(sMonSummaryScreen->summary.species, GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ABILITY_NUM)), sMonSummaryScreen->summary.species, sMonSummaryScreen->summary.pid);
+        ability = RandomizeAbility(ability, sMonSummaryScreen->summary.species, sMonSummaryScreen->summary.pid);
     }
 	
 	if(ModifyMode)
@@ -5071,8 +5070,8 @@ static void PrintMoveDetails(u16 move)
 	u8 PosX;
     struct Pokemon *mon = &sMonSummaryScreen->currentMon;
     struct PokeSummary *summary = &sMonSummaryScreen->summary;
-    u8 type1 = RandomizeType(gBaseStats[summary->species].type1, summary->species, summary->pid, TRUE);
-    u8 type2 = RandomizeType(gBaseStats[summary->species].type2, summary->species, summary->pid, FALSE);
+    u8 type1 = RandomizeType(GetMonData(mon, MON_DATA_TYPE1), summary->species, summary->pid, TRUE);
+    u8 type2 = RandomizeType(GetMonData(mon, MON_DATA_TYPE2), summary->species, summary->pid, FALSE);
 
     SetSpriteInvisibility(SPRITE_ARR_ID_MON, TRUE);
     SetSpriteInvisibility(SPRITE_ARR_ID_ITEM, TRUE);
@@ -5477,9 +5476,10 @@ static void CreateMoveTypeIcons(void)
 
 static void SetMonTypeIcons(void)
 {
+    struct Pokemon *mon = &sMonSummaryScreen->currentMon;
     struct PokeSummary *summary = &sMonSummaryScreen->summary;
-    u8 type1 = RandomizeType(gBaseStats[summary->species].type1, summary->species, summary->pid, TRUE);
-    u8 type2 = RandomizeType(gBaseStats[summary->species].type2, summary->species, summary->pid, FALSE);
+    u8 type1 = RandomizeType(GetMonData(mon, MON_DATA_TYPE1), summary->species, summary->pid, TRUE);
+    u8 type2 = RandomizeType(GetMonData(mon, MON_DATA_TYPE2), summary->species, summary->pid, FALSE);
 
     if (type1 != type2)
     {
@@ -5532,7 +5532,6 @@ static void SetContestMoveTypeIcons(void)
 static void SetNewMoveTypeIcon(void)
 {
     struct Pokemon *mon = &sMonSummaryScreen->currentMon;
-    u16 species = GetMonData(mon, MON_DATA_SPECIES);
     bool8 isEnemyMon = VarGet(VAR_BATTLE_CONTROLLER_PLAYER_F) == 2; //checks if you are looking into the summary screen for the enemy
 
     if (sMonSummaryScreen->newMove == MOVE_NONE)

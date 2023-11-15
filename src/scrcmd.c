@@ -2251,18 +2251,12 @@ bool8 ScrCmd_lockfortrainer(struct ScriptContext *ctx)
 // This command will set a Pokémon's eventLegal bit; there is no similar command to clear it.
 bool8 ScrCmd_setmoneventlegal(struct ScriptContext *ctx)
 {
-    bool8 isEventLegal = TRUE;
-    u16 partyIndex = VarGet(ScriptReadHalfword(ctx));
-
-    SetMonData(&gPlayerParty[partyIndex], MON_DATA_EVENT_LEGAL, &isEventLegal);
     return FALSE;
 }
 
 bool8 ScrCmd_checkmoneventlegal(struct ScriptContext *ctx)
 {
-    u16 partyIndex = VarGet(ScriptReadHalfword(ctx));
-
-    gSpecialVar_Result = GetMonData(&gPlayerParty[partyIndex], MON_DATA_EVENT_LEGAL, NULL);
+    gSpecialVar_Result = TRUE;
     return FALSE;
 }
 
@@ -2764,7 +2758,6 @@ bool8 ScrCmd_checkpartyfortypeornumber(struct ScriptContext *ctx)
     u16 number  = ScriptReadHalfword(ctx);
     u8 partySize = CalculatePlayerPartyCount();
     u8 i, type1, type2;
-    u16 species;
 
     if(partySize != number && number != 0){
         gSpecialVar_Result = FALSE;
@@ -2773,9 +2766,8 @@ bool8 ScrCmd_checkpartyfortypeornumber(struct ScriptContext *ctx)
 
     if(type != NUMBER_OF_MON_TYPES){
         for(i = 0; i < partySize; i++){
-            species = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES, NULL);
-            type1 = gBaseStats[species].type1;
-            type2 = gBaseStats[species].type2;
+            type1 = GetMonData(&gPlayerParty[i], MON_DATA_TYPE1, NULL);
+            type2 = GetMonData(&gPlayerParty[i], MON_DATA_TYPE2, NULL);
             if(type1 != type && type2 != type){
                 gSpecialVar_Result = FALSE;
                 return FALSE;
