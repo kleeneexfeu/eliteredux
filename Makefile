@@ -131,7 +131,13 @@ RAMSCRGEN := tools/ramscrgen/ramscrgen$(EXE)
 FIX := tools/gbafix/gbafix$(EXE)
 MAPJSON := tools/mapjson/mapjson$(EXE)
 JSONPROC := tools/jsonproc/jsonproc$(EXE)
-SCRIPT := tools/poryscript/poryscript$(EXE)
+ifeq ($(OS),Windows_NT)
+SCRIPT := tools/poryscript/poryscript-windows/poryscript$(EXE)
+PORYSCRIPTARGS := -fc tools/poryscript/poryscript-windows/font_widths.json
+else
+SCRIPT := tools/poryscript/poryscript-linux/poryscript$(EXE)
+PORYSCRIPTARGS := -fc tools/poryscript/poryscript-linux/font_widths.json
+endif
 
 PERL := perl
 
@@ -290,7 +296,7 @@ include songs.mk
 $(CRY_SUBDIR)/uncomp_%.bin: $(CRY_SUBDIR)/uncomp_%.aif ; $(AIF) $< $@
 $(CRY_SUBDIR)/%.bin: $(CRY_SUBDIR)/%.aif ; $(AIF) $< $@ --compress
 sound/%.bin: sound/%.aif ; $(AIF) $< $@
-data/%.inc: data/%.pory; $(SCRIPT) -i $< -o $@ -fc tools/poryscript/font_config.json
+data/%.inc: data/%.pory; $(SCRIPT) -i $< -o $@ $(PORYSCRIPTARGS)
 
 
 ifeq ($(MODERN),0)
