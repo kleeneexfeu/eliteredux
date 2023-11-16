@@ -15257,7 +15257,7 @@ static u16 CalcTypeEffectivenessMultiplierInternal(u16 move, u8 moveType, u8 bat
        !(gBattleMoves[move].flags & FLAG_DMG_UNGROUNDED_IGNORE_TYPE_IF_FLYING) && // Moves that ignore ground immunity 
        !((gBattleMoves[move].flags & FLAG_BONE_BASED) && (BattlerHasInnate(battlerAtk, ABILITY_BONE_ZONE) || GetBattlerAbility(battlerAtk) == ABILITY_BONE_ZONE))) //Bone Zone Check
     {
-        if(GetBattlerAbility(battlerDef) == ABILITY_LEVITATE){ //Defender has Levitate as Ability
+        if(recordAbilities && GetBattlerAbility(battlerDef) == ABILITY_LEVITATE){ //Defender has Levitate as Ability
             modifier = UQ_4_12(0.0);
             gLastUsedAbility = ABILITY_LEVITATE;
             gMoveResultFlags |= (MOVE_RESULT_MISSED | MOVE_RESULT_DOESNT_AFFECT_FOE);
@@ -15265,7 +15265,7 @@ static u16 CalcTypeEffectivenessMultiplierInternal(u16 move, u8 moveType, u8 bat
             gBattleCommunication[MISS_TYPE] = B_MSG_GROUND_MISS;
             RecordAbilityBattle(battlerDef, ABILITY_LEVITATE);
         }
-        else if(BattlerHasInnate(battlerDef, ABILITY_LEVITATE)){ //Defender has Levitate as Innate
+        else if(recordAbilities && BattlerHasInnate(battlerDef, ABILITY_LEVITATE)){ //Defender has Levitate as Innate
             if(!DoesBattlerIgnoreAbilityorInnateChecks(gBattlerAttacker)){ //Mold Breaker Check
                 modifier = UQ_4_12(0.0);
                 gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_LEVITATE;
@@ -15275,7 +15275,7 @@ static u16 CalcTypeEffectivenessMultiplierInternal(u16 move, u8 moveType, u8 bat
                 RecordAbilityBattle(battlerDef, ABILITY_LEVITATE);
             }
         }
-        else if(GetBattlerAbility(battlerDef) == ABILITY_DRAGONFLY){ //Defender has Dragonfly as Ability
+        else if(recordAbilities && GetBattlerAbility(battlerDef) == ABILITY_DRAGONFLY){ //Defender has Dragonfly as Ability
             modifier = UQ_4_12(0.0);
             gLastUsedAbility = ABILITY_DRAGONFLY;
             gMoveResultFlags |= (MOVE_RESULT_MISSED | MOVE_RESULT_DOESNT_AFFECT_FOE);
@@ -15283,7 +15283,7 @@ static u16 CalcTypeEffectivenessMultiplierInternal(u16 move, u8 moveType, u8 bat
             gBattleCommunication[MISS_TYPE] = B_MSG_GROUND_MISS;
             RecordAbilityBattle(battlerDef, ABILITY_DRAGONFLY);
         }
-        else if(BattlerHasInnate(battlerDef, ABILITY_DRAGONFLY)){ //Defender has Dragonfly as Innate
+        else if(recordAbilities && BattlerHasInnate(battlerDef, ABILITY_DRAGONFLY)){ //Defender has Dragonfly as Innate
             if(!DoesBattlerIgnoreAbilityorInnateChecks(gBattlerAttacker)){ //Mold Breaker Check
                 modifier = UQ_4_12(0.0);
                 gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_DRAGONFLY;
